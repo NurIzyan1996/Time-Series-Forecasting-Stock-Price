@@ -18,13 +18,15 @@ modules.py contains the codes where there are class and functions to be used in 
 ### The Architecture of DL Model
 ![The Architecture of Model](DL_model.png)
 
-# The Performance of models
+## The Performance of models
 DL Model Performance
-![The Performance of model](DL_model_performance.png)
+
+![The Performance of model](DL_model_performance.PNG)
 ![The Performance of model](DL_prediction_graph.png)
 
 ML Model Performance
-![The Performance of model](ML_model_performance.png)
+
+![The Performance of model](ML_model_performance.PNG)
 ![The Performance of model](ML_prediction_graph.png)
 
 ## Tensorboard screenshot from my browser
