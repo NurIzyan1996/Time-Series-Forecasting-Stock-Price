@@ -1,3 +1,4 @@
+'''Predicting Top Glove Stock Price'''
 
 import os
 import numpy as np
@@ -21,7 +22,7 @@ test_df = test_df[1]
 #%% STEP 2: Data Interpretation
 graph = DataVisualization()
 graph.plot_initial_trend(train_df)
-''' Observation: the graph_1.png shows there is a dramatic increment of open 
+''' Observation: the DL_trend_graph.png shows there is a dramatic increment of open 
 price, and a downward trend at the end of the data.'''
 
 #%% STEP 3: Data Preprocessing

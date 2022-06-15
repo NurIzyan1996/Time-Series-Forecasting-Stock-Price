@@ -4,6 +4,8 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error,mean_squared_error
 from tensorflow.keras.layers import Dense,Dropout,LSTM
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import TensorBoard
@@ -25,6 +27,18 @@ class DataVisualization():
         plt.plot(data_2, color='b', label='Predicted Stock Price')
         plt.legend(['Actual','Predicted'])
         return plt.show()
+    
+    def plot_performance2(self,data_1,data_2,data_3):
+        plt.figure(figsize=(14, 6))
+        plt.title("Stock Closing Price against Date",fontsize=20)
+        plt.xlabel("Date(Day)")
+        plt.ylabel("Stock Closing Price")
+        
+        plt.plot(data_1, label="Open(Train)")
+        plt.plot(data_2, label='Open(Test)')
+        plt.plot(data_3, label='Prediction')
+        
+        plt.legend()
     
 class DataPreprocessing():
     
@@ -48,6 +62,16 @@ class ModelCreation():
         data_y = np.array([data[i,0] for i in range(size_1,size_2)])
         return data_x, data_y
     
+    def split_train_test(self, data, window_size,col_name):
+        train = data[:window_size] 
+        test = data[window_size:] 
+        
+        X_train = train.drop(col_name,axis=1)
+        y_train = train[col_name] 
+        X_test = test.drop(col_name,axis=1)
+        y_test = test[col_name]
+        return train,test,X_train,y_train,X_test,y_test
+    
     def lstm_model(self,data):
         model = Sequential()
         model.add(LSTM(128, activation='tanh',
@@ -67,6 +91,11 @@ class ModelCreation():
         return model.fit(data_1, data_2, epochs=epochs, 
                          callbacks=tensorboard_callback)
     
+    def linear_model(self,data_1,data_2):
+        model = LinearRegression()
+        model.fit(data_1,data_2)
+        return model
+    
 class ModelEvaluation():
     def __init__(self):
         pass
@@ -78,3 +107,13 @@ class ModelEvaluation():
         new_data_2 = scaler.inverse_transform(predicted.reshape(len(predicted),
                                                                 1))
         return new_data_1, new_data_2
+    
+    def model_performance(self,model,data_1,data_2,data_3):
+        print('Coefficient/Weights:', model.coef_) 
+        print('Intercept/bias:', round(model.intercept_,4)) 
+        print('MAE:', round(mean_absolute_error(data_2, data_3), 4))
+        print('MAPE:', round((mean_absolute_error(data_2,data_3)/sum(abs(data_2))) *100, 4), '%')
+        print('MSE:', round(mean_squared_error(data_2, data_3), 4))
+        print('RMSE:', round(np.sqrt(mean_squared_error(data_2, data_3)), 4))
+        print('R-squared:', round(model.score(data_1, data_2),4))
+
